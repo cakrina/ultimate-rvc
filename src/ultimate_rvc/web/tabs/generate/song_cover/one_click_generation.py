@@ -42,6 +42,7 @@ def render(
     song_dirs: Sequence[gr.Dropdown],
     intermediate_audio: gr.Dropdown,
     output_audio: gr.Dropdown,
+    cookiefile: str | None = None,
 ) -> None:
     """
     Render "Generate song covers - One-click generation" tab.
@@ -69,6 +70,9 @@ def render(
     output_audio : gr.Dropdown
         Dropdown for selecting output audio files to delete in the
         "Delete audio" tab.
+    cookiefile : str, optional
+        The path to a file containing cookies to use when downloading
+        audio from Youtube.
 
     """
     with gr.Tab("One-click generation"):
@@ -513,6 +517,7 @@ def render(
                     run_pipeline,
                     info_msg="Song cover generated successfully!",
                 ),
+                cookiefile=cookiefile,
                 progress_bar=PROGRESS_BAR,
             ),
             inputs=[

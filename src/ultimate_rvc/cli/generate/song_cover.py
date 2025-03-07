@@ -8,6 +8,7 @@ from __future__ import annotations
 from typing import Annotated
 
 import time
+from pathlib import Path  # noqa: TC003
 
 import typer
 from rich import print as rprint
@@ -325,6 +326,20 @@ def run_pipeline(
             help="The name of the song cover.",
         ),
     ] = None,
+    cookiefile: Annotated[
+        Path | None,
+        typer.Option(
+            rich_help_panel=PanelName.NETWORK_OPTIONS,
+            help=(
+                "The path to a file containing cookies to use when downloading audio"
+                "from Youtube."
+            ),
+            exists=True,
+            file_okay=True,
+            dir_okay=False,
+            resolve_path=True,
+        ),
+    ] = None,
 ) -> None:
     """Run the song cover generation pipeline."""
     rprint()
@@ -360,6 +375,7 @@ def run_pipeline(
         output_sr=output_sr,
         output_format=output_format,
         output_name=output_name,
+        cookiefile=cookiefile,
         progress_bar=None,
     )
     table = Table()

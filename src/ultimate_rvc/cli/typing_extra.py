@@ -24,6 +24,7 @@ class PanelName(StrEnum):
     RVC_EMBEDDINGS_OPTIONS = "RVC Embeddings Options"
     VOCAL_POST_PROCESSING_OPTIONS = "Vocal Post-processing Options"
     AUDIO_MIXING_OPTIONS = "Audio Mixing Options"
+    NETWORK_OPTIONS = "Network Options"
     EXTRACTION_OPTIONS = "Extraction Options"
     TRAINING_OPTIONS = "Training Options"
     ALGORITHMIC_OPTIONS = "Algorithmic Options"

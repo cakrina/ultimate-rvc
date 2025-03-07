@@ -159,6 +159,7 @@ The behaviour of the Ultimate RVC project can be customized via a number of envi
 * `URVC_AUDIO_DIR`: The directory in which audio files will be stored. If not set, audio files will be stored in an `audio` directory in the current working directory.
 * `URVC_TEMP_DIR`: The directory in which temporary files will be stored. If not set, temporary files will be stored in a `temp` directory in the current working directory.
 * `URVC_VOICE_MODELS_DIR`: The directory in which voice models will be stored. If not set, voice models will be stored in a `voice_models` subdirectory of the `URVC_MODELS_DIR` directory.
+* `YT_COOKIEFILE`: The path to a file containing cookies to use when downloading audio from YouTube via the web UI. If not set, no cookies will be used.
 
 ## Terms of Use
 

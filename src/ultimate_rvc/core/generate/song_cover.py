@@ -475,7 +475,11 @@ def init_song_dir(
     return song_dir_path, source_type
 
 
-def _get_youtube_audio(url: str, directory: StrPath) -> Path:
+def _get_youtube_audio(
+    url: str,
+    directory: StrPath,
+    cookiefile: StrPath | None = None,
+) -> Path:
     """
     Download audio from a YouTube video.
 
@@ -485,6 +489,9 @@ def _get_youtube_audio(url: str, directory: StrPath) -> Path:
         URL which points to a YouTube video.
     directory : StrPath
         The directory to save the downloaded audio file to.
+    cookiefile : StrPath
+        The path to a file containing cookies to use when downloading
+        audio from Youtube.
 
     Returns
     -------
@@ -499,14 +506,12 @@ def _get_youtube_audio(url: str, directory: StrPath) -> Path:
     """
     static_ffmpeg.add_paths()
     validate_url(url)
-    outtmpl = str(Path(directory, "00_%(title)s"))
+    outtmpl = str(Path(directory, "00_%(title)s.%(ext)s"))
     ydl_opts = {
         "quiet": True,
-        "no_warnings": True,
-        "format": "bestaudio",
+        "format": "bestaudio/best",
+        "cookiefile": cookiefile,
         "outtmpl": outtmpl,
-        "ignoreerrors": True,
-        "nocheckcertificate": True,
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -519,13 +524,14 @@ def _get_youtube_audio(url: str, directory: StrPath) -> Path:
         result = ydl.extract_info(url, download=True)
         if not result:
             raise YoutubeUrlError(url, playlist=False)
-        file = ydl.prepare_filename(result, outtmpl=f"{outtmpl}.wav")
+        file = ydl.prepare_filename(result)
 
-    return Path(file)
+    return Path(file).with_suffix(".wav")
 
 
 def retrieve_song(
     source: str,
+    cookiefile: StrPath | None = None,
     progress_bar: gr.Progress | None = None,
     percentage: float = 0.5,
 ) -> tuple[Path, Path]:
@@ -538,6 +544,9 @@ def retrieve_song(
     source : str
         A Youtube URL, the path to a local audio file or the path to a
         song directory.
+    cookiefile: StrPath, optional
+        The path to a file containing cookies to use when downloading
+        audio from Youtube.
     progress_bar : gr.Progress, optional
         Gradio progress bar to update.
     percentage : float, default=0.5
@@ -566,7 +575,7 @@ def retrieve_song(
         if source_type == SongSourceType.URL:
             display_progress("[~] Downloading song...", percentage, progress_bar)
             song_url = source.split("&")[0]
-            song_path = _get_youtube_audio(song_url, song_dir_path)
+            song_path = _get_youtube_audio(song_url, song_dir_path, cookiefile)
 
         else:
             display_progress("[~] Copying song...", percentage, progress_bar)
@@ -1002,6 +1011,7 @@ def run_pipeline(
     output_sr: int = 44100,
     output_format: AudioExt = AudioExt.MP3,
     output_name: str | None = None,
+    cookiefile: StrPath | None = None,
     progress_bar: gr.Progress | None = None,
 ) -> tuple[Path, ...]:
     """
@@ -1078,6 +1088,9 @@ def run_pipeline(
         The audio format of the song cover.
     output_name : str, optional
         The name of the song cover.
+    cookiefile : StrPath, optional
+        The path to a file containing cookies to use when downloading
+        audio from Youtube.
     progress_bar : gr.Progress, optional
         Gradio progress bar to update.
 
@@ -1094,6 +1107,7 @@ def run_pipeline(
     display_progress("[~] Starting song cover generation pipeline...", 0, progress_bar)
     song, song_dir = retrieve_song(
         source,
+        cookiefile=cookiefile,
         progress_bar=progress_bar,
         percentage=0 / 9,
     )

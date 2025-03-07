@@ -104,6 +104,7 @@ def render(
     cached_song_1click: gr.Dropdown,
     intermediate_audio: gr.Dropdown,
     output_audio: gr.Dropdown,
+    cookiefile: str | None = None,
 ) -> None:
     """
     Render "Generate song cover - multi-step generation" tab.
@@ -133,6 +134,9 @@ def render(
     output_audio : gr.Dropdown
         Dropdown for selecting output audio files to delete in the
         "Delete audio" tab.
+    cookiefile : str, optional
+        The path to a file containing cookies to use when downloading
+        audio from Youtube.
 
     """
     with gr.Tab("Multi-step generation"):
@@ -328,6 +332,7 @@ def render(
                         retrieve_song,
                         info_msg="Song retrieved successfully!",
                     ),
+                    cookiefile=cookiefile,
                     progress_bar=PROGRESS_BAR,
                 ),
                 inputs=source,

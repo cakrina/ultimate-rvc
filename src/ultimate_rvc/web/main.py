@@ -338,6 +338,7 @@ def render_app() -> gr.Blocks:
                 song_dirs,
                 intermediate_audio,
                 output_audio,
+                cookiefile=os.environ.get("YT_COOKIEFILE"),
             )
             render_song_cover_multi_step_tab(
                 song_cover_voice_model_multi,
@@ -347,6 +348,7 @@ def render_app() -> gr.Blocks:
                 cached_song_1click,
                 intermediate_audio,
                 output_audio,
+                cookiefile=os.environ.get("YT_COOKIEFILE"),
             )
         with gr.Tab("Generate speech"):
             render_speech_one_click_tab(
