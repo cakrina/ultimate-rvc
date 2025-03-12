@@ -10,7 +10,7 @@ from multiprocessing import cpu_count
 from ultimate_rvc.core.common import (
     display_progress,
     get_combined_file_hash,
-    validate_model_exists,
+    validate_model,
 )
 from ultimate_rvc.core.exceptions import (
     Entity,
@@ -77,7 +77,7 @@ def extract_features(
         voice model identified by the provided name.
 
     """
-    model_path = validate_model_exists(model_name, Entity.TRAINING_MODEL)
+    model_path = validate_model(model_name, Entity.TRAINING_MODEL)
     sliced_audios16k_path = model_path / "sliced_audios_16k"
     if not sliced_audios16k_path.is_dir() or not any(sliced_audios16k_path.iterdir()):
         raise ModelAsssociatedEntityNotFoundError(
@@ -89,7 +89,7 @@ def extract_features(
     custom_embedder_model_path, combined_file_hash = None, None
     chosen_embedder_model, embedder_model_id = [embedder_model] * 2
     if embedder_model == EmbedderModel.CUSTOM:
-        custom_embedder_model_path = validate_model_exists(
+        custom_embedder_model_path = validate_model(
             custom_embedder_model,
             Entity.CUSTOM_EMBEDDER_MODEL,
         )

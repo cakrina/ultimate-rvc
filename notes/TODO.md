@@ -3,6 +3,7 @@
 * fix problem with vocal conversion becoming slow after running multiple times
 * fix typing of gradio app.load function
   * make pr for gradio fixing it
+  
 ## Project/task management
 
 * Should find tool for project/task management
@@ -87,20 +88,14 @@
 
 ### one click generation
 
-* make subsections under accorditions under one click generation tab into sub accordions ?
-  * applies for voice conversion options and audio mixing options
 * implement a one-click training tab
 
 ### Common
 
 * redesign/simplify ui using new side-bar component from gradio
-* redesign/simplify ui using new support for multi-page apps in gradio (https://github.com/gradio-app/gradio/pull/10433)
-* consider using the new search bar functionality for gradio dataframe component instaed of having custom functionality for filtering
 * simplify and extend progress bar functionality by using the new show_progress_on and show_progress paramters on event listeners (https://github.com/gradio-app/gradio/pull/10492)
 * optimize rendering speed using new js=True parameter (https://github.com/gradio-app/gradio/pull/10500)
 * optimize rendering colab notebook
-* utilize new gr.success pop up message (https://github.com/gradio-app/gradio/pull/10254)
-
 
 * fix problem with audio components restarting if play button is pressed too fast after loading new audio
   * this is a gradio bug so report?
@@ -377,9 +372,6 @@
 
 ### Model management
 
-* use the validate_model_exists for functions defined in manage.models
-* also define a validate_model_not_exists to use for functions defined in manage.models
-
 * Voice blending
   * for fusion also have weights for each model -- so that the combination is weighted by cusotm values (default 0.5 and 0.5)
     * or can have custom fusion methods
@@ -509,7 +501,6 @@
 
 * Experiment with new themes including [Building new ones](https://www.gradio.app/guides/theming-guid)
   * first of all make new theme that is like the default gradio 4 theme in terms of using semi transparent orange as the main color and semi-transparent grey for secondary color. The new gradio 5 theme is good apart from using solid colors so maybe use that as base theme.
-  * Support both dark and light theme in app?
   * Add Support for changing theme in app?
   * Use Applio theme as inspiration for default theme?
 * Experiment with using custom CSS

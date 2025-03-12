@@ -23,13 +23,13 @@ from ultimate_rvc.core.common import (
     get_file_size,
     json_dump,
     json_load,
+    validate_model,
     validate_url,
 )
 from ultimate_rvc.core.exceptions import (
     Entity,
     Location,
     ModelEntity,
-    ModelExistsError,
     ModelNotFoundError,
     NotFoundError,
     NotProvidedError,
@@ -381,24 +381,10 @@ def download_voice_model(url: str, name: str) -> None:
     name : str
         The name to give to the downloaded voice model.
 
-    Raises
-    ------
-    NotProvidedError
-        If no URL or name is provided.
-    ModelExistsError
-        If a voice model with the provided name already exists.
-
     """
-    if not url:
-        raise NotProvidedError(entity=Entity.URL)
-    if not name:
-        raise NotProvidedError(entity=Entity.MODEL_NAME)
-    name = name.strip()
-    extraction_path = VOICE_MODELS_DIR / name
-    if extraction_path.exists():
-        raise ModelExistsError(Entity.VOICE_MODEL, name)
-
     validate_url(url)
+    extraction_path = validate_model(name, Entity.VOICE_MODEL, mode="not_exists")
+
     zip_name = url.split("/")[-1].split("?")[0]
 
     # NOTE in case huggingface link is a direct link rather
@@ -539,9 +525,6 @@ def upload_voice_model(files: Sequence[StrPath], name: str) -> None:
     ------
     NotProvidedError
         If no file paths or name are provided.
-    ModelExistsError
-        If a voice model with the provided name already
-        exists.
     UploadTypeError
         If a single uploaded file is not a .pth file or a .zip file.
         If two uploaded files are not a .pth file and an .index file.
@@ -551,12 +534,7 @@ def upload_voice_model(files: Sequence[StrPath], name: str) -> None:
     """
     if not files:
         raise NotProvidedError(entity=Entity.FILES, ui_msg=UIMessage.NO_UPLOADED_FILES)
-    if not name:
-        raise NotProvidedError(entity=Entity.MODEL_NAME)
-    name = name.strip()
-    model_dir_path = VOICE_MODELS_DIR / name
-    if model_dir_path.exists():
-        raise ModelExistsError(Entity.VOICE_MODEL, name)
+    model_dir_path = validate_model(name, Entity.VOICE_MODEL, mode="not_exists")
     sorted_file_paths = sorted([Path(f) for f in files], key=lambda f: f.suffix)
     match sorted_file_paths:
         case [file_path]:
@@ -677,9 +655,6 @@ def upload_custom_embedder_model(files: Sequence[StrPath], name: str) -> None:
     ------
     NotProvidedError
         If no name or file paths are provided.
-    ModelExistsError
-        If a custom embedder model with the provided name already
-        exists.
     UploadTypeError
         If a single uploaded file is not a .zip file or two uploaded
         files are not named "pytorch_model.bin" and "config.json".
@@ -689,12 +664,11 @@ def upload_custom_embedder_model(files: Sequence[StrPath], name: str) -> None:
     """
     if not files:
         raise NotProvidedError(entity=Entity.FILES, ui_msg=UIMessage.NO_UPLOADED_FILES)
-    if not name:
-        raise NotProvidedError(entity=Entity.MODEL_NAME)
-    name = name.strip()
-    model_dir_path = CUSTOM_EMBEDDER_MODELS_DIR / name
-    if model_dir_path.exists():
-        raise ModelExistsError(Entity.CUSTOM_EMBEDDER_MODEL, name)
+    model_dir_path = validate_model(
+        name,
+        Entity.CUSTOM_EMBEDDER_MODEL,
+        mode="not_exists",
+    )
     sorted_file_paths = sorted([Path(f) for f in files], key=lambda f: f.suffix)
     match sorted_file_paths:
         case [file_path]:
