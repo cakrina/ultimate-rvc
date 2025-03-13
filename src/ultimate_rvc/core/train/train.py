@@ -16,7 +16,7 @@ from ultimate_rvc.core.common import (
     copy_files_to_new_dir,
     json_dump,
     json_load,
-    validate_model_exists,
+    validate_model,
 )
 from ultimate_rvc.core.exceptions import (
     Entity,
@@ -100,7 +100,7 @@ def _get_pretrained_model(
 
             pg, pd = pretrained_selector(vocoder, sample_rate=sample_rate)
         case PretrainedType.CUSTOM:
-            custom_pretrained_path = validate_model_exists(
+            custom_pretrained_path = validate_model(
                 custom_pretrained,
                 Entity.CUSTOM_PRETRAINED_MODEL,
             )
@@ -257,7 +257,7 @@ def run_training(
 
 
     """
-    model_path = validate_model_exists(model_name, Entity.TRAINING_MODEL)
+    model_path = validate_model(model_name, Entity.TRAINING_MODEL)
     filelist_path = model_path / "filelist.txt"
     if not filelist_path.is_file():
         raise ModelAsssociatedEntityNotFoundError(

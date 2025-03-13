@@ -65,7 +65,7 @@ def exception_harness(  # noqa: UP047
             raise gr.Error(str(e)) from e
         else:
             if info_msg:
-                gr.Info(info_msg, duration=1)
+                gr.Success(info_msg, duration=1)
             return res
 
     return _wrapped_fn

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import hashlib
 import json
@@ -28,6 +28,7 @@ from ultimate_rvc.core.exceptions import (
     Entity,
     HttpUrlError,
     ModelEntity,
+    ModelExistsError,
     ModelNotFoundError,
     NotFoundError,
     NotProvidedError,
@@ -392,17 +393,24 @@ def validate_audio_dir_exists(
     return audio_dir_path
 
 
-def validate_model_exists(name: str | None, entity: ModelEntity) -> Path:
+def validate_model(
+    name: str | None,
+    entity: ModelEntity,
+    mode: Literal["exists", "not_exists"] = "exists",
+) -> Path:
     """
     Validate that the provided name is defined and that it identifies
-    an existing instance of the provided model entity.
+    an existing or non-existing instance of the provided model entity.
 
     Parameters
     ----------
     name : str | None
         The name of the model to validate.
-    entity : Entity
+    entity : ModelEntity
         The entity that the name should identify.
+    mode : Literal["exists", "not_exists"]
+        The mode of validation. If "exists", the model must exist. If
+        "not_exists", the model must not exist.
 
     Returns
     -------
@@ -415,6 +423,9 @@ def validate_model_exists(name: str | None, entity: ModelEntity) -> Path:
         If the model name is not defined.
     ModelNotFoundError
         If the model name does not point to an existing instance of the
+        provided model entity.
+    ModelExistsError
+        If the model name points to an existing instance of the
         provided model entity.
 
     """
@@ -435,12 +446,17 @@ def validate_model_exists(name: str | None, entity: ModelEntity) -> Path:
             ui_msg = UIMessage.NO_MODEL
             directory = MODELS_DIR
 
-    directory_path = Path(directory)
     if not name:
         raise NotProvidedError(entity=Entity.MODEL_NAME, ui_msg=ui_msg)
-    model_path = directory_path / name
-    if not model_path.is_dir():
+
+    name = name.strip()
+
+    model_path = Path(directory) / name
+
+    if mode == "exists" and not model_path.is_dir():
         raise ModelNotFoundError(entity, name=name)
+    if mode == "not_exists" and model_path.is_dir():
+        raise ModelExistsError(entity, name=name)
 
     return model_path
 
@@ -456,10 +472,14 @@ def validate_url(url: str) -> None:
 
     Raises
     ------
+    NotProvidedError
+        If the URL is not provided.
     HttpUrlError
         If the URL is invalid.
 
     """
+    if not url:
+        raise NotProvidedError(entity=Entity.URL)
     try:
         TypeAdapter(AnyHttpUrl).validate_python(url)
     except ValidationError:

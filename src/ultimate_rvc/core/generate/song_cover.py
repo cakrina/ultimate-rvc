@@ -26,7 +26,7 @@ from ultimate_rvc.core.common import (
     get_file_hash,
     json_dump,
     json_load,
-    validate_model_exists,
+    validate_model,
     validate_url,
 )
 from ultimate_rvc.core.exceptions import (
@@ -1023,9 +1023,9 @@ def run_pipeline(
         intermediate audio files that were generated.
 
     """
-    validate_model_exists(model_name, Entity.VOICE_MODEL)
+    validate_model(model_name, Entity.VOICE_MODEL)
     if embedder_model == EmbedderModel.CUSTOM:
-        validate_model_exists(custom_embedder_model, Entity.CUSTOM_EMBEDDER_MODEL)
+        validate_model(custom_embedder_model, Entity.CUSTOM_EMBEDDER_MODEL)
     display_progress("[~] Retrieving song...", 0 / 9, progress_bar)
     song, song_dir = retrieve_song(source, cookiefile=cookiefile)
     display_progress("[~] Separating vocals from instrumentals...", 1 / 9, progress_bar)

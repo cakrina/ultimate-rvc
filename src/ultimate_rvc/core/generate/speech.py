@@ -28,7 +28,7 @@ from ultimate_rvc.core.generate.common import (
     convert,
     get_unique_base_path,
     mix_audio,
-    validate_model_exists,
+    validate_model,
 )
 from ultimate_rvc.core.generate.typing_extra import (
     EdgeTTSAudioMetaData,
@@ -591,9 +591,9 @@ def run_pipeline(
         generated along the way.
 
     """
-    validate_model_exists(model_name, Entity.VOICE_MODEL)
+    validate_model(model_name, Entity.VOICE_MODEL)
     if embedder_model == EmbedderModel.CUSTOM:
-        validate_model_exists(custom_embedder_model, Entity.CUSTOM_EMBEDDER_MODEL)
+        validate_model(custom_embedder_model, Entity.CUSTOM_EMBEDDER_MODEL)
     display_progress("[~] Converting text using Edge TTS...", 0.0, progress_bar)
     speech_track = run_edge_tts(
         source,

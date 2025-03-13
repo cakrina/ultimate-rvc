@@ -22,7 +22,7 @@ from ultimate_rvc.core.common import (
     json_load,
     validate_audio_dir_exists,
     validate_audio_file_exists,
-    validate_model_exists,
+    validate_model,
 )
 from ultimate_rvc.core.exceptions import (
     Entity,
@@ -226,7 +226,7 @@ def _get_rvc_files(model_name: str) -> tuple[Path, Path | None]:
 
 
     """
-    model_dir_path = validate_model_exists(model_name, Entity.VOICE_MODEL)
+    model_dir_path = validate_model(model_name, Entity.VOICE_MODEL)
     file_path_map = {
         ext: path
         for path in model_dir_path.iterdir()
@@ -357,10 +357,10 @@ def convert(
             directory_entity = Entity.DIRECTORY
     audio_path = validate_audio_file_exists(audio_track, track_entity)
     directory_path = validate_audio_dir_exists(directory, directory_entity)
-    validate_model_exists(model_name, Entity.VOICE_MODEL)
+    validate_model(model_name, Entity.VOICE_MODEL)
     custom_embedder_model_path = None
     if embedder_model == EmbedderModel.CUSTOM:
-        custom_embedder_model_path = validate_model_exists(
+        custom_embedder_model_path = validate_model(
             custom_embedder_model,
             Entity.CUSTOM_EMBEDDER_MODEL,
         )
