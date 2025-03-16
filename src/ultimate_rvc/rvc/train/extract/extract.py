@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 import concurrent.futures
 import glob
 import json
@@ -20,17 +18,11 @@ sys.path.append(os.path.join(now_dir))
 
 # Zluda hijack
 import ultimate_rvc.rvc.lib.zluda
-from ultimate_rvc.common import RVC_MODELS_DIR, lazy_import
+from ultimate_rvc.common import RVC_MODELS_DIR
 from ultimate_rvc.rvc.configs.config import Config
 from ultimate_rvc.rvc.lib.predictors.RMVPE import RMVPE0Predictor
 from ultimate_rvc.rvc.lib.utils import load_audio, load_embedding
 from ultimate_rvc.rvc.train.utils import remove_sox_libmso6_from_ld_preload
-
-if TYPE_CHECKING:
-    import static_sox.run as static_sox_run
-else:
-    static_sox_run = lazy_import("static_sox.run")
-
 
 logger = logging.getLogger(__name__)
 

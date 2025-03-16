@@ -7,10 +7,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import lazy_loader as lazy
+
 import shutil
 from multiprocessing import cpu_count
 
-from ultimate_rvc.common import TRAINING_MODELS_DIR, lazy_import
+from ultimate_rvc.common import TRAINING_MODELS_DIR
 from ultimate_rvc.core.common import (
     TRAINING_AUDIO_DIR,
     validate_audio_dir_exists,
@@ -32,7 +34,7 @@ if TYPE_CHECKING:
 
     from ultimate_rvc.typing_extra import StrPath
 else:
-    static_ffmpeg = lazy_import("static_ffmpeg")
+    static_ffmpeg = lazy.load("static_ffmpeg")
 
 
 def populate_dataset(name: str, audio_files: Sequence[StrPath]) -> Path:

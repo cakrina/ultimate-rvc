@@ -7,13 +7,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import lazy_loader as lazy
+
 import logging
 from functools import cache, reduce
 from pathlib import Path
 
 from rich import print as rprint
 
-from ultimate_rvc.common import lazy_import
 from ultimate_rvc.core.common import (
     get_file_hash,
     get_hash,
@@ -57,12 +58,8 @@ if TYPE_CHECKING:
     from ultimate_rvc.rvc.infer.infer import VoiceConverter
     from ultimate_rvc.typing_extra import Json, StrPath
 else:
-    # NOTE yt_dlp is not used here but importing it fixes erroneous user
-    # warning
-    yt_dlp = lazy_import("yt_dlp")
-    ffmpeg = lazy_import("ffmpeg")
-    static_ffmpeg = lazy_import("static_ffmpeg")
-
+    static_ffmpeg = lazy.load("static_ffmpeg")
+    ffmpeg = lazy.load("ffmpeg")
 logger = logging.getLogger(__name__)
 
 

@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+import lazy_loader as lazy
+
 import os
 from concurrent.futures import ThreadPoolExecutor
 
@@ -7,7 +9,6 @@ from ultimate_rvc.common import (
     EMBEDDER_MODELS_DIR,
     PRETRAINED_MODELS_DIR,
     RVC_MODELS_DIR,
-    lazy_import,
 )
 
 if TYPE_CHECKING:
@@ -16,8 +17,8 @@ if TYPE_CHECKING:
     import tqdm
 
 else:
-    requests = lazy_import("requests")
-    tqdm = lazy_import("tqdm")
+    tqdm = lazy.load("tqdm")
+    requests = lazy.load("requests")
 
 
 url_base = "https://huggingface.co/JackismyShephard/ultimate-rvc/resolve/main/Resources"
@@ -185,5 +186,3 @@ def prequisites_download_pipeline(
                     print("No executables needed")
             if pretraineds_hifigan:
                 download_mapping_files(pretraineds_hifigan_list, global_bar)
-    else:
-        pass

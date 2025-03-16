@@ -9,9 +9,11 @@ from typing import TYPE_CHECKING
 
 from pathlib import Path
 
+import lazy_loader as lazy
+
 from rich import print as rprint
 
-from ultimate_rvc.common import VOICE_MODELS_DIR, lazy_import
+from ultimate_rvc.common import VOICE_MODELS_DIR
 from ultimate_rvc.core.common import FLAG_FILE
 from ultimate_rvc.core.generate.song_cover import initialize_audio_separator
 from ultimate_rvc.core.manage.models import download_voice_model
@@ -23,7 +25,7 @@ if TYPE_CHECKING:
     import static_sox
 
 else:
-    static_sox = lazy_import("static_sox")
+    static_sox = lazy.load("static_sox")
 
 
 def download_sample_models() -> None:

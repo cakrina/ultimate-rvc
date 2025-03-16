@@ -7,6 +7,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import lazy_loader as lazy
+
 import logging
 import operator
 import shutil
@@ -17,7 +19,7 @@ from urllib.parse import parse_qs, urlparse
 
 from pydantic import ValidationError
 
-from ultimate_rvc.common import SEPARATOR_MODELS_DIR, lazy_import
+from ultimate_rvc.common import SEPARATOR_MODELS_DIR
 from ultimate_rvc.core.common import (
     INTERMEDIATE_AUDIO_BASE_DIR,
     OUTPUT_AUDIO_DIR,
@@ -73,8 +75,6 @@ if TYPE_CHECKING:
     import gradio as gr
 
     import pedalboard
-    import pedalboard._pedalboard as pedalboard_
-    import pedalboard.io as pedalboard_io
     import soundfile as sf
     import static_ffmpeg
     import static_sox
@@ -84,14 +84,11 @@ if TYPE_CHECKING:
     from audio_separator.separator import Separator
 
 else:
-    yt_dlp = lazy_import("yt_dlp")
-
-    pedalboard = lazy_import("pedalboard")
-    pedalboard_ = lazy_import("pedalboard._pedalboard")
-    pedalboard_io = lazy_import("pedalboard.io")
-    sf = lazy_import("soundfile")
-    static_ffmpeg = lazy_import("static_ffmpeg")
-    static_sox = lazy_import("static_sox")
+    static_ffmpeg = lazy.load("static_ffmpeg")
+    static_sox = lazy.load("static_sox")
+    yt_dlp = lazy.load("yt_dlp")
+    pedalboard = lazy.load("pedalboard")
+    sf = lazy.load("soundfile")
 
 logger = logging.getLogger(__name__)
 
@@ -103,6 +100,7 @@ def _get_audio_separator(
     segment_size: int = SegmentSize.SEG_256,
     sample_rate: int = 44100,
 ) -> Separator:
+
     static_ffmpeg.add_paths()
     from audio_separator.separator import Separator  # noqa: PLC0415
 
@@ -665,7 +663,7 @@ def _add_effects(
         The damping of the reverb effect.
 
     """
-    board = pedalboard_.Pedalboard(
+    board = pedalboard.Pedalboard(
         [
             pedalboard.HighpassFilter(),
             pedalboard.Compressor(ratio=4, threshold_db=-15),
@@ -679,8 +677,8 @@ def _add_effects(
     )
 
     with (
-        pedalboard_io.AudioFile(str(audio_track)) as f,
-        pedalboard_io.AudioFile(
+        pedalboard.io.AudioFile(str(audio_track)) as f,
+        pedalboard.io.AudioFile(
             str(output_file),
             "w",
             f.samplerate,
