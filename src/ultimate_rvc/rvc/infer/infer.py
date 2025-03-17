@@ -31,7 +31,8 @@ from pedalboard import (
 now_dir = os.getcwd()
 sys.path.append(now_dir)
 
-from ultimate_rvc.common import lazy_import
+import lazy_loader as lazy
+
 from ultimate_rvc.rvc.configs.config import Config
 from ultimate_rvc.rvc.infer.pipeline import Pipeline as VC
 from ultimate_rvc.rvc.infer.typing_extra import ConvertAudioKwArgs
@@ -43,7 +44,7 @@ from ultimate_rvc.typing_extra import F0Method
 if TYPE_CHECKING:
     import noisereduce as nr
 else:
-    nr = lazy_import("noisereduce")
+    nr = lazy.load("noisereduce")
 
 # logging.getLogger("httpx").setLevel(logging.WARNING)
 # logging.getLogger("httpcore").setLevel(logging.WARNING)

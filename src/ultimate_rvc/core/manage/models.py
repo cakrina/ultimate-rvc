@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import lazy_loader as lazy
+
 import re
 import shutil
 import urllib.request
@@ -15,7 +17,6 @@ from ultimate_rvc.common import (
     CUSTOM_PRETRAINED_MODELS_DIR,
     TRAINING_MODELS_DIR,
     VOICE_MODELS_DIR,
-    lazy_import,
 )
 from ultimate_rvc.core.common import (
     copy_files_to_new_dir,
@@ -53,7 +54,6 @@ if TYPE_CHECKING:
     from typing import NoReturn
 
     from _collections_abc import Sequence
-    from concurrent import futures as concurrent_futures
 
     import requests
 
@@ -61,9 +61,8 @@ if TYPE_CHECKING:
 
     from ultimate_rvc.typing_extra import PretrainedSampleRate, StrPath
 else:
-    requests = lazy_import("requests")
-    tqdm = lazy_import("tqdm")
-    concurrent_futures = lazy_import("concurrent.futures")
+    requests = lazy.load("requests")
+    tqdm = lazy.load("tqdm")
 
 PUBLIC_MODELS_JSON = json_load(Path(__file__).parent / "public_models.json")
 PUBLIC_MODELS_TABLE = VoiceModelMetaDataTable.model_validate(PUBLIC_MODELS_JSON)
@@ -236,7 +235,7 @@ def get_pretrained_metadata() -> PretrainedModelMetaDataTable:
     else:
         try:
             json_url = "https://huggingface.co/JackismyShephard/ultimate-rvc/raw/main/pretrains.json"
-            response = requests.get(json_url)
+            response = requests.get(json_url, timeout=10)
             response.raise_for_status()
             pretrained_metadata_dict = response.json()
             pretrained_metadata = PretrainedModelMetaDataTable.model_validate(
@@ -422,7 +421,7 @@ def _download_pretrained_model_file(
         TQDM progress bar to update.
 
     """
-    response = requests.get(url, stream=True)
+    response = requests.get(url, stream=True, timeout=10)
     response.raise_for_status()
     block_size = 1024
     destination_path = Path(destination)
@@ -476,6 +475,7 @@ def download_pretrained_model(name: str, sample_rate: PretrainedSampleRate) -> N
     total_size = get_file_size(d_url) + get_file_size(g_url)
 
     model_path.mkdir(parents=True)
+    import concurrent.futures  # noqa: PLC0415
 
     with (
         tqdm.tqdm(
@@ -484,7 +484,7 @@ def download_pretrained_model(name: str, sample_rate: PretrainedSampleRate) -> N
             unit_scale=True,
             desc="Downloading files",
         ) as tqdm_bar,
-        concurrent_futures.ThreadPoolExecutor() as executor,
+        concurrent.futures.ThreadPoolExecutor() as executor,
     ):
         futures = [
             executor.submit(

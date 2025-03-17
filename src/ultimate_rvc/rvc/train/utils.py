@@ -5,6 +5,8 @@ import logging
 import os
 from collections import OrderedDict
 
+import lazy_loader as lazy
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -12,12 +14,10 @@ import torch
 
 import soundfile as sf
 
-from ultimate_rvc.common import lazy_import
-
 if TYPE_CHECKING:
     import static_sox.run as static_sox_run
 else:
-    static_sox_run = lazy_import("static_sox.run")
+    static_sox_run = lazy.load("static_sox.run")
 
 logger = logging.getLogger(__name__)
 

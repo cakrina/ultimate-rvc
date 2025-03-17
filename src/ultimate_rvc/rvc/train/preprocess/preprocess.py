@@ -21,9 +21,10 @@ import noisereduce as nr
 now_directory = os.getcwd()
 sys.path.append(now_directory)
 
+import lazy_loader as lazy
+
 import logging
 
-from ultimate_rvc.common import lazy_import
 from ultimate_rvc.rvc.lib.utils import load_audio
 from ultimate_rvc.rvc.train.preprocess.slicer import Slicer
 from ultimate_rvc.rvc.train.utils import remove_sox_libmso6_from_ld_preload
@@ -33,8 +34,8 @@ if TYPE_CHECKING:
     import ffmpeg
     import static_ffmpeg
 else:
-    ffmpeg = lazy_import("ffmpeg")
-    static_ffmpeg = lazy_import("static_ffmpeg")
+    static_ffmpeg = lazy.load("static_ffmpeg")
+    ffmpeg = lazy.load("ffmpeg")
 logging.getLogger("numba.core.byteflow").setLevel(logging.WARNING)
 logging.getLogger("numba.core.ssa").setLevel(logging.WARNING)
 logging.getLogger("numba.core.interpreter").setLevel(logging.WARNING)

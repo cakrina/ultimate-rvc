@@ -5,7 +5,7 @@ TTS.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
 
 import time
 
@@ -21,13 +21,8 @@ from ultimate_rvc.cli.common import (
     format_duration,
 )
 from ultimate_rvc.cli.typing_extra import PanelName
-from ultimate_rvc.common import lazy_import
+from ultimate_rvc.core.generate import speech as generate_speech
 from ultimate_rvc.typing_extra import AudioExt, EmbedderModel, F0Method
-
-if TYPE_CHECKING:
-    from ultimate_rvc.core.generate import speech as generate_speech
-else:
-    generate_speech = lazy_import("ultimate_rvc.core.generate.speech")
 
 app = typer.Typer(
     name="speech",

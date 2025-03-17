@@ -27,8 +27,8 @@ def get_gpu_info() -> list[tuple[str, int]]:
         available GPU.
 
     """
-    # NOTE The lazy_import function does not work with torch
-    # so we import it here manually
+    # NOTE lazy importing does not work with torch so we import it here
+    #  manually
     import torch  # noqa: PLC0415
 
     ngpu = torch.cuda.device_count()

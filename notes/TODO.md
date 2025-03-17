@@ -174,16 +174,6 @@
 
 ### Common
 
-* should remove input validation from modules from core package
-  * typer handles this on the cli part
-  * for gradio we should make a wrapper functio nthat provides the needed validation
-    * just checking whether value is provided or not
-  
-* lazy_import function also does not seem to work with static_ffmpeg and yt_dlp. If we instead delay import them manually, then we can get the CLI startup time down to 0.5 sec from 1.1 sec.
-
-* for those packages that dont work with lazy_import function make wrapper functions
-(similar to get audio_separator and get_voice_converter) that do the import and return an object
-
 * we should fix static_ffmpeg and static_sox so that the weak parameter works.
   * otherwise we will keep adding values to environment variables each time their add_paths()function is called
   * we should also add a remove_paths() function to remove the paths from the environment variables

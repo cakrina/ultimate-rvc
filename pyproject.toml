@@ -11,6 +11,7 @@ requires-python = "==3.12.*"
 dependencies = [
     #Validation
     "pydantic==2.10.6",
+    "lazy-loader==0.4.0",
 
     # CLI
     "typer==0.15.2",
@@ -142,6 +143,7 @@ relative-imports-order = "closest-to-furthest"
 section-order = [
     "future",
     "typing",
+    "importing",
     "standard-library",
     "third-party",
     "networking",
@@ -157,6 +159,7 @@ section-order = [
 
 [tool.ruff.lint.isort.sections]
 "typing" = ["typing", "typing_extensions"]
+"importing" = ["lazy_loader"]
 "networking" = [
     "requests",
     "yt_dlp",

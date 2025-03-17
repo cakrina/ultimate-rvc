@@ -7,11 +7,7 @@ from functools import partial
 import gradio as gr
 
 from ultimate_rvc.core.manage.settings import delete_temp_files
-from ultimate_rvc.web.common import (
-    confirm_box_js,
-    confirmation_harness,
-    render_msg,
-)
+from ultimate_rvc.web.common import confirm_box_js, confirmation_harness, render_msg
 
 
 def render() -> None:

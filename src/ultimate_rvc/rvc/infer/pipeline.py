@@ -20,14 +20,16 @@ sys.path.append(now_dir)
 
 import logging
 
-from ultimate_rvc.common import RVC_MODELS_DIR, lazy_import
+import lazy_loader as lazy
+
+from ultimate_rvc.common import RVC_MODELS_DIR
 from ultimate_rvc.rvc.lib.predictors.FCPE import FCPEF0Predictor
 from ultimate_rvc.rvc.lib.predictors.RMVPE import RMVPE0Predictor
 
 if TYPE_CHECKING:
     import torchcrepe
 else:
-    torchcrepe = lazy_import("torchcrepe")
+    torchcrepe = lazy.load("torchcrepe")
 
 # logging.getLogger("faiss").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)

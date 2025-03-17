@@ -2,14 +2,15 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from collections.abc import Sequence
 from functools import partial
 
 import gradio as gr
 
-from ultimate_rvc.common import lazy_import
+# NOTE gradio uses pandas for more than typechecking
+# so we need to import it here
+import pandas as pd  # noqa: TC002
+
 from ultimate_rvc.core.manage.models import (
     delete_all_custom_embedder_models,
     delete_all_custom_pretrained_models,
@@ -39,13 +40,6 @@ from ultimate_rvc.web.common import (
     render_msg,
     update_dropdowns,
 )
-
-if TYPE_CHECKING:
-
-    import pandas as pd
-
-else:
-    pd = lazy_import("pandas")
 
 
 def _filter_public_models_table(tags: Sequence[str], query: str) -> gr.Dataframe:

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
+import lazy_loader as lazy
+
 import hashlib
 import json
 import shutil
@@ -20,7 +22,6 @@ from ultimate_rvc.common import (
     MODELS_DIR,
     TRAINING_MODELS_DIR,
     VOICE_MODELS_DIR,
-    lazy_import,
 )
 from ultimate_rvc.core.exceptions import (
     AudioDirectoryEntity,
@@ -44,7 +45,7 @@ if TYPE_CHECKING:
 
     from ultimate_rvc.typing_extra import Json, StrPath
 else:
-    requests = lazy_import("requests")
+    requests = lazy.load("requests")
 
 
 RVC_DOWNLOAD_URL = "https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/"
@@ -308,7 +309,7 @@ def get_file_size(url: str) -> int:
         The size of the file at the given URL.
 
     """
-    response = requests.head(url)
+    response = requests.head(url, timeout=10)
     response.raise_for_status()
     return int(response.headers.get("content-length", 0))
 

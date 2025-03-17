@@ -7,13 +7,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import lazy_loader as lazy
+
 from pathlib import Path
 
 import anyio
 
 from pydantic import ValidationError
 
-from ultimate_rvc.common import lazy_import
 from ultimate_rvc.core.common import (
     OUTPUT_AUDIO_DIR,
     SPEECH_DIR,
@@ -56,7 +57,7 @@ if TYPE_CHECKING:
     import edge_tts
 
 else:
-    edge_tts = lazy_import("edge_tts")
+    edge_tts = lazy.load("edge_tts")
 
 
 def list_edge_tts_voices(
