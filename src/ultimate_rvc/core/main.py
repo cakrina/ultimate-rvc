@@ -7,9 +7,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from pathlib import Path
-
 import lazy_loader as lazy
+
+from pathlib import Path
 
 from rich import print as rprint
 

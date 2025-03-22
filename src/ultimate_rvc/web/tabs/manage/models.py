@@ -30,6 +30,7 @@ from ultimate_rvc.core.manage.models import (
     get_public_model_tags,
     get_training_model_names,
     get_voice_model_names,
+    load_public_models_table,
     upload_custom_embedder_model,
     upload_voice_model,
 )
@@ -241,8 +242,7 @@ def render(
                     )
                 with gr.Row():
                     public_models_table = gr.Dataframe(
-                        value=_filter_public_models_table,
-                        inputs=[tags, search_query],
+                        value=load_public_models_table([]),
                         headers=[
                             "Name",
                             "Description",
@@ -254,6 +254,17 @@ def render(
                         label="Public models table",
                         interactive=False,
                     )
+                # We are updating the table here instead of doing it
+                # implicitly using value=_filter_public_models_table
+                # and inputs=[tags, search_query] when instantiating
+                # gr.Dataframe because that does not work with reload
+                # mode due to a bug.
+                gr.on(
+                    triggers=[search_query.change, tags.change],
+                    fn=_filter_public_models_table,
+                    inputs=[tags, search_query],
+                    outputs=public_models_table,
+                )
 
             with gr.Row():
                 voice_model_url = gr.Textbox(

@@ -1,8 +1,4 @@
 # TODO
-
-* fix problem with vocal conversion becoming slow after running multiple times
-* fix typing of gradio app.load function
-  * make pr for gradio fixing it
   
 ## Project/task management
 
@@ -93,25 +89,10 @@
 ### Common
 
 * redesign/simplify ui using new side-bar component from gradio
-* simplify and extend progress bar functionality by using the new show_progress_on and show_progress paramters on event listeners (https://github.com/gradio-app/gradio/pull/10492)
-* optimize rendering speed using new js=True parameter (https://github.com/gradio-app/gradio/pull/10500)
 * optimize rendering colab notebook
 
 * fix problem with audio components restarting if play button is pressed too fast after loading new audio
   * this is a gradio bug so report?
-* fix new problem with hot reload:
-
-  ```python
-  Reloading src.ultimate_rvc.web.main failed with the following exception: 
-  Traceback (most recent call last):
-    File "C:\Users\Jacki\repositories\ultimate-rvc\uv\.venv\Lib\site-packages\gradio\utils.py", line 302, in watchfn
-      changed_module = _find_module(changed)
-                      ^^^^^^^^^^^^^^^^^^^^^
-    File "C:\Users\Jacki\repositories\ultimate-rvc\uv\.venv\Lib\site-packages\gradio\utils.py", line 226, in _find_module
-      for s, v in sys.modules.items():
-                  ^^^^^^^^^^^^^^^^^^^
-  RuntimeError: dictionary changed size during iteration
-  ```
 
 * it is possible to have several parallel event listeners for a component:
   * like if we have click_event = some_component.click(...) then we can have several click.then event listeners.
@@ -141,6 +122,9 @@
     * Whenever the state of a component is changed save the new state to a custom JSON file.
       * Then whenever the app is refreshed load the current state of components from the JSON file
       * This solution should probably work for Block types that are not components
+
+* fix problem with reload mode not working for indirectly referenced files (DIFFICULT TO IMPLEMENT)
+  * this is a gradio bug so report?
 * fix gradio problem where last field components on a row are not aligned (DIFFICULT TO IMPLEMENT)
   * current solution with manual `<br>` padding is way too hacky.
   * this is a gradio bug so report?
