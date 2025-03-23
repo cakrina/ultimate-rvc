@@ -89,7 +89,6 @@
 ### Common
 
 * redesign/simplify ui using new side-bar component from gradio
-* optimize rendering colab notebook
 
 * fix problem with audio components restarting if play button is pressed too fast after loading new audio
   * this is a gradio bug so report?
