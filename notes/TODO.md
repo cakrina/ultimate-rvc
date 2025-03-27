@@ -93,10 +93,6 @@
 * fix problem with audio components restarting if play button is pressed too fast after loading new audio
   * this is a gradio bug so report?
 
-* it is possible to have several parallel event listeners for a component:
-  * like if we have click_event = some_component.click(...) then we can have several click.then event listeners.
-  * knowing this, simplify event listener code in the web package.
-
 * add something like an agreement to the top of the readme that says that the user agrees to the terms and conditions
   * something like:
   "This software is open source under the MIT license. The author does not have any control over the software. Users who use the software and distribute the sounds exported by the software are solely responsible.If you do not agree with this clause, you cannot use or reference any codes and files within the software package. See the root directory Agreement-LICENSE.txt for details."
@@ -141,12 +137,12 @@
 
 ## Online hosting optimization
 
+* define as many functions with async as possible to increase responsiveness of app
+  * and then use `Block.launch()` with `max_threads`set to an appropriate value representing the number of concurrent threads that can be run on the server (default is 40)
 * make concurrency_id and concurrency limit on components be dependent on whether gpu is used or not
   * if only cpu then there should be no limit
 * increase value of `default_concurrency_limit` in `Block.queue` so that the same event listener can be called multiple times concurrently
 * use `Block.launch()` with `max_file_size` to prevent too large uploads
-* define as many functions with async as possible to increase responsiveness of app
-  * and then use `Block.launch()` with `max_threads`set to an appropriate value representing the number of concurrent threads that can be run on the server (default is 40)
 * consider setting `max_size` in `Block.queue()` to explicitly limit the number of people that can be in the queue at the same time
 * clearing of temporary files should happen after a user logs in and out
   * and in this case it should only be temporary files for the active user that are cleared
@@ -156,10 +152,6 @@
 ## Core
 
 ### Common
-
-* we should fix static_ffmpeg and static_sox so that the weak parameter works.
-  * otherwise we will keep adding values to environment variables each time their add_paths()function is called
-  * we should also add a remove_paths() function to remove the paths from the environment variables
 
 * instead of having custom embedder models, just allow users to upload new embedder models which will be shown in the main embedder models dropdown (and perhaps also saved in the main embedder models dir?)
 
@@ -187,7 +179,6 @@
 
 ### Audio separation
 
-* use the new autocast parameter to speed up separation process.
 * support using multiple models in parallel and combining results
   * median, mean, min, maxx
 * expand back-end function(s) so that they are parametrized by both model type as well as model settings

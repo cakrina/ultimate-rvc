@@ -27,7 +27,7 @@ dependencies = [
     "scipy==1.15.2",
     "matplotlib==3.10.1",
     "tqdm==4.67.1",
-    "gradio==5.22.0",
+    "gradio==5.23.0",
     
     # Machine learning
     "torchcrepe==0.0.23",
@@ -43,7 +43,7 @@ dependencies = [
     "torch-tb-profiler==0.4.3",
     
     # Audio
-    "static-ffmpeg==2.8",
+    "static-ffmpeg==2.12",
     "static-sox==1.0.1",
     "typed-ffmpeg==2.6.2",
     "soundfile==0.13.1",
