@@ -69,7 +69,7 @@ patch -p1 <<'EOF'
 -name = "torch-cu124"
 -url = "https://download.pytorch.org/whl/cu124"
 -explicit = true
--
+
  [tool.pyright]
  stubPath = "src/ultimate_rvc/stubs"
  pythonVersion = "3.12"
