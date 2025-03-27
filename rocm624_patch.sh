@@ -74,6 +74,6 @@ patch -p1 <<'EOF'
 +name = "torch-rocm"
 +url = "https://download.pytorch.org/whl/rocm6.2.4"
  explicit = true
- 
+
  [tool.pyright]
 EOF
