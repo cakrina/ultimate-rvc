@@ -60,11 +60,11 @@ main() {
             ;;
         dev)
             check_dependencies
-            uv run gradio ./src/ultimate_rvc/web/main.py --demo-name app
+            uv run --extra $EXTRA gradio ./src/ultimate_rvc/web/main.py --demo-name app
             ;;
         cli)
             check_dependencies
-            uv run ./src/ultimate_rvc/cli/main.py "$@"
+            uv run --extra $EXTRA ./src/ultimate_rvc/cli/main.py "$@"
             ;;
         docs)
             check_dependencies
